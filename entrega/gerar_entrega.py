@@ -12,12 +12,7 @@ OUTPUT_DOCX = os.path.join(ENTREGA_DIR, "2TDS_Fase04_Cap08_Atividade_Prototipaca
 OUTPUT_HTML = os.path.join(ENTREGA_DIR, "documento_entrega.html")
 
 DESCRICAO_UMA_LINHA = (
-    "A SmartSec AI resolve o custo trabalhista proibitivo do monitoramento humano passivo em escala 12×36 "
-    "(R$ 171,5 mil/ano por posto segundo o PNCP), a fadiga cognitiva causada por até 95% de alarmes falsos "
-    "ambientais e o passivo jurídico de multas da LGPD/ANPD (até 2% do faturamento ou R$ 50 milhões) por meio "
-    "de uma plataforma B2B SaaS de Visão Computacional em borda (Edge AI) que se conecta às câmeras já existentes "
-    "para filtrar ruídos climáticos, calibrar a detecção conforme as estatísticas criminais estaduais do Sinesp/MJSP, "
-    "prevenir quase-acidentes de trabalho (SafetyTech) e anonimizar rostos nativamente (Privacy by Design)."
+    "A SmartSec AI reduz o alto custo e os falsos alarmes do CFTV passivo com IA preditiva e LGPD na borda."
 )
 
 TELAS_PROTOTIPO = [
@@ -430,27 +425,9 @@ def gerar_html():
     1. Em uma linha, descreva o seu projeto de startup, incluindo o problema e a solução:
   </div>
   <div class="section-body">
-    <p class="one-line-box">
+    <p class="one-line-box" style="white-space: nowrap;">
       <strong>{DESCRICAO_UMA_LINHA}</strong>
     </p>
-    <div class="pills-summary">
-      <div class="pill-card">
-        <strong>💰 Dor Financeira (PNCP)</strong>
-        Custo de R$ 171.570,75/ano por posto 24h (escala 12×36) otimizado via triagem de IA.
-      </div>
-      <div class="pill-card">
-        <strong>🔕 Dor Operacional (ABESE)</strong>
-        Filtro anti-fadiga elimina até 95% dos disparos falsos por chuva, vento e animais.
-      </div>
-      <div class="pill-card">
-        <strong>📍 Dor Regional (Sinesp)</strong>
-        Pesos calibrados conforme a dinâmica criminal estadual mapeada pelo MJSP.
-      </div>
-      <div class="pill-card">
-        <strong>🔒 Dor Jurídica (LGPD)</strong>
-        Borrão facial nativo na borda (Art. 11) contra multas da ANPD de até R$ 50 milhões.
-      </div>
-    </div>
   </div>
 
   <!-- QUESTAO 2 DO TEMPLATE -->
