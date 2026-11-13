@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartSec AI // Cyber-Optics CFTV Preditivo, Anti-Fadiga & LGPD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilo.css" />
+</head>
+<body>
+  <!-- GRADE DE MIRA CYBERPUNK GLOBAL (RETICULA DE CAMERA) -->
+  <div class="cyber-reticle-overlay" aria-hidden="true">
+    <div class="reticle-line h-top"></div>
+    <div class="reticle-line h-bottom"></div>
+    <div class="reticle-line v-left"></div>
+    <div class="reticle-line v-right"></div>
+    <div class="reticle-telemetry-top">WPXY // -2355 4663 / 1715 7075 / EDGE-AI-V4.2 // SINESP-SYNC</div>
+    <div class="reticle-telemetry-side">SYS.CCO.24H // RM566997 // PRIVACY-BY-DESIGN</div>
+  </div>
+
+  <!-- =========================================================
+       MENU FLUTUANTE NO TOPO DA TELA (ESTILO CYBERPUNK HUD)
+  ========================================================== -->
+  <header class="floating-top-hud">
+    <!-- BLOCO ESQUERDO: MARCA E STATUS -->
+    <div class="hud-brand-pill">
+      <div class="cyber-logo-box">
+        <span class="cyber-pulse"></span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <circle cx="12" cy="11" r="3"/>
+        </svg>
+      </div>
+      <div class="brand-meta">
+        <div class="brand-name">SMARTSEC <span class="cyan">// AI</span></div>
+        <div class="brand-sub">HUB LOGÍSTICO &amp; SHOPPING SUL · RM 566997</div>
+      </div>
+    </div>
+
+    <!-- BLOCO CENTRAL: ABAS FLUTUANTES ESTILO CYBERPUNK -->
+    <nav class="hud-tabs-bar" id="menuNavegacao">
+      <button class="cyber-tab-btn active" data-aba="cco" onclick="trocarAba('cco')">
+        <span class="ct-key">01</span>
+        <span class="ct-icon">🎥</span>
+        <span class="ct-label">CFTV 4-QUAD</span>
+        <span class="ct-badge critico">LIVE</span>
+      </button>
+
+      <button class="cyber-tab-btn" data-aba="antifadiga" onclick="trocarAba('antifadiga')">
+        <span class="ct-key">02</span>
+        <span class="ct-icon">🔕</span>
+        <span class="ct-label">ANTI-FADIGA</span>
+        <span class="ct-badge verde">-94%</span>
+      </button>
+
+      <button class="cyber-tab-btn" data-aba="safetytech" onclick="trocarAba('safetytech')">
+        <span class="ct-key">03</span>
+        <span class="ct-icon">🦺</span>
+        <span class="ct-label">RADAR GALPÃO</span>
+        <span class="ct-badge aviso">3,2s</span>
+      </button>
+
+      <button class="cyber-tab-btn" data-aba="roi" onclick="trocarAba('roi')">
+        <span class="ct-key">04</span>
+        <span class="ct-icon">💰</span>
+        <span class="ct-label">ROI 12×36</span>
+        <span class="ct-badge ciano">R$ 171k</span>
+      </button>
+    </nav>
+
+    <!-- BLOCO DIREITO: CONTROLES FLUTUANTES RAPIDOS (LGPD + SINESP + CHUVA) -->
+    <div class="hud-quick-controls">
+      <button class="cyber-ctrl-btn lgpd-on" id="btnToggleLgpdTopo" onclick="alternarLgpd(!lgpdAtiva)" title="Alternar Borrão Facial Nativo na Borda (Art. 11 LGPD)">
+        <span class="ctrl-tag">ART.11</span>
+        <strong id="textoStatusLgpd">🔒 LGPD: BORRÃO ON</strong>
+      </button>
+
+      <div class="cyber-uf-group" title="Calibração Regional de Crimes Sinesp/MJSP">
+        <span class="uf-prefix">SINESP:</span>
+        <button class="uf-btn active" data-uf="SP" onclick="selecionarEstadoSinesp('SP')">SP</button>
+        <button class="uf-btn" data-uf="RJ" onclick="selecionarEstadoSinesp('RJ')">RJ</button>
+        <button class="uf-btn" data-uf="MG" onclick="selecionarEstadoSinesp('MG')">MG</button>
+      </div>
+
+      <button class="cyber-ctrl-btn acao-chuva" onclick="simularDisparoAmbiental()" title="Simular rajada de vento e chuva na CAM-03">
+        🌧️ TESTAR FILTRO
+      </button>
+    </div>
+  </header>
+
+  <!-- BANNER FLUTUANTE DE NOTIFICACAO -->
+  <div id="bannerNotificacao" class="notificacao-banner oculto"></div>
+
+  <!-- =========================================================
+       ABA 1: 4 CAMERAS COBRINDO A TELA TODA (FULLSCREEN 2X2)
+  ========================================================== -->
+  <section class="tab-section active" id="aba-cco">
+    <div class="fullscreen-quad-grid" id="gradeCameras">
+      <!-- Renderizado via app.js: 4 quadrantes preenchendo 100% da tela -->
+    </div>
+
+    <!-- MIRA CENTRAL ENTRE AS 4 CAMERAS -->
+    <div class="quad-center-node" aria-hidden="true">
+      <div class="qcn-inner">EDGE AI // 4CH</div>
+    </div>
+
+    <!-- PAINEL FLUTUANTE COMPACTO (HUD DIREITO INFERIOR) -->
+    <aside class="floating-hud-inspector" id="hudInspetorFlutuante">
+      <div class="fhi-header">
+        <span class="fhi-title">⚡ TELEMETRIA &amp; CALIBRAÇÃO [<span id="ufTituloCard">SP</span>]</span>
+        <button class="fhi-minimize" onclick="alternarPainelFlutuante()" id="btnMinimizarHud">_ MINIMIZAR</button>
+      </div>
+      <div class="fhi-body" id="corpoHudFlutuante">
+        <div id="painelCameraDetalhe"></div>
+        <div class="fhi-divider"></div>
+        <div class="sinesp-mini-box">
+          <div class="smb-head">
+            <span>PESOS CRIMINAIS SINESP (<strong id="badgeUfAtiva">SP</strong>)</span>
+            <span class="smb-foco" id="resumoFocoSidebar">Roubo de Carga &amp; Varejo</span>
+          </div>
+          <p class="smb-desc" id="descricaoSinespCard"></p>
+          <div class="sinesp-bars" id="barrasSinesp"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- BARRA DE COMANDOS INFERIOR ESQUERDA (ESTILO HUD CYBERPUNK) -->
+    <div class="floating-bottom-prompts">
+      <span><kbd>CLIQUE</kbd> Selecionar Câmera</span>
+      <span><kbd>LGPD</kbd> Borrão Biometria</span>
+      <span><kbd>SINESP</kbd> Calibrar Estado</span>
+      <span><kbd>POSTO 24H</kbd> R$ 171.570/ano (PNCP)</span>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       ABA 2: FILTRO ANTI-FADIGA DE ALARMES (SOBRE FUNDO GALPAO)
+  ========================================================== -->
+  <section class="tab-section cyber-modal-screen" id="aba-antifadiga">
+    <div class="cyber-screen-container">
+      <div class="cyber-section-header">
+        <div>
+          <span class="cyber-eyebrow">MÓDULO 02 // FILTRAGEM NEURAL EM BORDA (ABESE &amp; IBM ALERT FATIGUE)</span>
+          <h2>MOTOR ANTI-FADIGA: TRIAGEM REAL VS. FALSO POSITIVO AMBIENTAL</h2>
+        </div>
+        <div class="cyber-kpi-strip">
+          <div class="ck-item"><span>FALSOS ALARMES FILTRADOS</span><strong class="verde">94,2% (139/dia)</strong></div>
+          <div class="ck-item"><span>TEMPO DE DESCARTE</span><strong class="ciano">11 ms (Edge)</strong></div>
+          <div class="ck-item"><span>ATENÇÃO HUMANA POUPADA</span><strong class="amarelo">4h 12m / turno</strong></div>
+        </div>
+      </div>
+
+      <div class="comparison-banner">
+        <div class="comp-box legado">
+          <div class="comp-tag">❌ CFTV LEGADO PASSIVO (SEM SMARTSEC AI)</div>
+          <div class="comp-numbers">
+            <strong>142 DISPAROS/DIA</strong>
+            <span>94% ruído de chuva, vento, faróis e animais</span>
+          </div>
+          <p>Gera <strong>fadiga cognitiva severa</strong> (confirmada por 78% dos gestores na validação): o operador fica sobrecarregado e ignora invasões reais.</p>
+        </div>
+
+        <div class="comp-arrow">⚡</div>
+
+        <div class="comp-box smartsec">
+          <div class="comp-tag">✅ MOTOR ANTI-FADIGA SMARTSEC AI</div>
+          <div class="comp-numbers">
+            <strong>APENAS 3 ALERTAS REAIS</strong>
+            <span>139 alarmes falsos silenciados na borda</span>
+          </div>
+          <p>O operador só é acionado em <strong>ameaças humanas verificadas ou risco de acidente</strong>, permitindo que 1 supervisor gerencie múltiplas centrais.</p>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-pills">
+          <button class="pill-btn active" data-filtro="todos" onclick="filtrarEventos('todos')">[ TODOS OS EVENTOS (7) ]</button>
+          <button class="pill-btn" data-filtro="real" onclick="filtrarEventos('real')">[ 🚨 AMEAÇAS REAIS (3) ]</button>
+          <button class="pill-btn" data-filtro="falso" onclick="filtrarEventos('falso')">[ 🛡️ FALSOS POSITIVOS SILENCIADOS (4) ]</button>
+        </div>
+        <div class="filter-meta">
+          STATUS DO FILTRO CLIMÁTICO: <strong>OPERACIONAL // BORDA ATIVA</strong>
+        </div>
+      </div>
+
+      <div class="events-table-card">
+        <table class="events-table">
+          <thead>
+            <tr>
+              <th>TIMESTAMP / ID</th>
+              <th>CÂMERA / SETOR</th>
+              <th>CLASSIFICAÇÃO EDGE AI</th>
+              <th>OCORRÊNCIA E CONTEXTO REGIONAL (SINESP / SST)</th>
+              <th>BLINDAGEM LGPD</th>
+              <th>STATUS / AÇÃO</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaEventosBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       ABA 3: PLANTA TATICA PREDITIVA COM FUNDO DE CAMERA DO GALPAO
+  ========================================================== -->
+  <section class="tab-section cyber-modal-screen" id="aba-safetytech">
+    <div class="cyber-screen-container">
+      <div class="cyber-section-header">
+        <div>
+          <span class="cyber-eyebrow">MÓDULO 03 // VISÃO DE CÂMERA DO GALPÃO + VETORIZAÇÃO PREDITIVA</span>
+          <h2>PLANTA TÁTICA DO GALPÃO — RASTREAMENTO MULTI-CÂMERA &amp; QUASE-ACIDENTES</h2>
+        </div>
+        <div class="cyber-kpi-strip">
+          <div class="ck-item"><span>ANTECIPAÇÃO DE COLISÃO</span><strong class="amarelo">3,2 SEGUNDOS</strong></div>
+          <div class="ck-item"><span>CONFORMIDADE SST</span><strong class="ciano">NR-12 / NR-06</strong></div>
+          <div class="ck-item"><span>RASTREIO MULTI-CAM</span><strong class="critico">ALVO TRAVADO</strong></div>
+        </div>
+      </div>
+
+      <div class="safety-grid">
+        <!-- MAPA TATICO SOBRE IMAGEM REAL DE CAMERA DO GALPAO -->
+        <div class="panel-card map-card">
+          <div class="tactical-map">
+            <svg viewBox="0 0 820 450" class="floorplan-svg">
+              <defs>
+                <pattern id="cyberGrid" width="32" height="32" patternUnits="userSpaceOnUse">
+                  <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(0, 240, 255, 0.14)" stroke-width="1"/>
+                  <circle cx="32" cy="32" r="1" fill="rgba(255, 42, 84, 0.4)"/>
+                </pattern>
+                <linearGradient id="camTint" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#050811" stop-opacity="0.68"/>
+                  <stop offset="50%" stop-color="#09131c" stop-opacity="0.58"/>
+                  <stop offset="100%" stop-color="#050811" stop-opacity="0.82"/>
+                </linearGradient>
+              </defs>
+
+              <!-- IMAGEM REAL DO GALPAO COMO FUNDO DE CAMERA -->
+              <image href="img/cam01.jpg" x="0" y="0" width="820" height="450" preserveAspectRatio="xMidYMid slice" opacity="0.55" />
+              <rect width="820" height="450" fill="url(#camTint)"/>
+              <rect width="820" height="450" fill="url(#cyberGrid)"/>
+
+              <!-- MOLDURA DE CAMERA OVERHEAD DO GALPAO -->
+              <rect x="12" y="12" width="796" height="426" fill="none" stroke="rgba(255, 42, 84, 0.45)" stroke-width="1.5" stroke-dasharray="10 5"/>
+              <text x="24" y="30" fill="#00f0ff" font-family="JetBrains Mono" font-size="10.5" font-weight="700">
+                CAM-OVERHEAD // GALPÃO LOGÍSTICO CENTRAL · VISÃO TÁTICA INTEGRADA [REC ●]
+              </text>
+              <text x="615" y="30" fill="#ff2a54" font-family="JetBrains Mono" font-size="10.5" font-weight="700">
+                FOV: 180° // LGPD MASK: ON
+              </text>
+
+              <!-- QUADRANTE 1 (SUPERIOR ESQUERDO): ESTACIONAMENTO NORTE -->
+              <rect x="26" y="44" width="365" height="168" rx="4" fill="rgba(8, 15, 28, 0.76)" stroke="#00f0ff" stroke-width="1.8"/>
+              <text x="42" y="68" fill="#00f0ff" font-family="Chakra Petch" font-size="13.5" font-weight="700">
+                [SETOR 01] ESTACIONAMENTO EXTERNO NORTE
+              </text>
+              <text x="42" y="86" fill="#cbd5e1" font-family="JetBrains Mono" font-size="10.5">
+                CAM-03 · Filtro Climático Ativo (Chuva/Vento ignorados)
+              </text>
+
+              <!-- QUADRANTE 2 (SUPERIOR DIREITO): GALPAO INDUSTRIAL B2 -->
+              <rect x="415" y="44" width="379" height="168" rx="4" fill="rgba(24, 18, 8, 0.78)" stroke="#f59e0b" stroke-width="2" stroke-dasharray="7 4"/>
+              <text x="431" y="68" fill="#fbbf24" font-family="Chakra Petch" font-size="13.5" font-weight="700">
+                [SETOR 02] GALPÃO B2 — CORREDOR EMPILHADEIRAS
+              </text>
+              <text x="431" y="86" fill="#fde68a" font-family="JetBrains Mono" font-size="10.5">
+                CAM-02 · Zona SafetyTech de Prevenção de Colisão
+              </text>
+
+              <!-- QUADRANTE 3 (INFERIOR ESQUERDO): DOCAS DE CARGA SUL -->
+              <rect x="26" y="236" width="365" height="178" rx="4" fill="rgba(45, 10, 18, 0.78)" stroke="#ff2a54" stroke-width="2"/>
+              <text x="42" y="262" fill="#ff2a54" font-family="Chakra Petch" font-size="13.5" font-weight="700">
+                [SETOR 03] DOCAS DE CARGA SUL (BAIAS 01 A 06)
+              </text>
+              <text x="42" y="280" fill="#fda4af" font-family="JetBrains Mono" font-size="10.5">
+                CAM-01 · Padrão Sinesp: Intrusão junto à Carreta #4812
+              </text>
+
+              <!-- QUADRANTE 4 (INFERIOR DIREITO): PORTARIA PRINCIPAL -->
+              <rect x="415" y="236" width="379" height="178" rx="4" fill="rgba(6, 28, 24, 0.76)" stroke="#10b981" stroke-width="1.8"/>
+              <text x="431" y="262" fill="#34d399" font-family="Chakra Petch" font-size="13.5" font-weight="700">
+                [SETOR 04] PORTARIA PRINCIPAL &amp; ECLUSA
+              </text>
+              <text x="431" y="280" fill="#a7f3d0" font-family="JetBrains Mono" font-size="10.5">
+                CAM-04 · Controle de EPI e Borrão Facial LGPD Nativo
+              </text>
+
+              <!-- VETOR DE RASTREAMENTO DO SUSPEITO (SEM CORTAR O TEXTO) -->
+              <circle cx="170" cy="150" r="7" fill="#fbbf24" stroke="#000" stroke-width="2"/>
+              <rect x="65" y="114" width="210" height="22" rx="3" fill="rgba(9, 13, 22, 0.9)" stroke="#fbbf24" stroke-width="1"/>
+              <text x="75" y="129" fill="#fde68a" font-family="JetBrains Mono" font-size="10.5" font-weight="700">
+                11:39 · ORIGEM DETECTADA (CAM-03)
+              </text>
+
+              <path d="M 170 157 L 170 345" fill="none" stroke="#ff2a54" stroke-width="3.5" stroke-dasharray="7 5"/>
+
+              <circle cx="170" cy="350" r="10" fill="#ff2a54"/>
+              <circle cx="170" cy="350" r="20" fill="none" stroke="#ff2a54" stroke-width="2" opacity="0.7"/>
+              <rect x="196" y="336" width="180" height="26" rx="3" fill="rgba(255, 42, 84, 0.22)" stroke="#ff2a54" stroke-width="1.2"/>
+              <text x="204" y="353" fill="#fff" font-family="JetBrains Mono" font-size="10.5" font-weight="700">
+                11:42 · ALVO RASTREADO
+              </text>
+
+              <!-- VETOR DE QUASE-ACIDENTE EMPILHADEIRA (QUADRANTE 2) -->
+              <line x1="455" y1="158" x2="605" y2="158" stroke="#f59e0b" stroke-width="4"/>
+              <line x1="605" y1="106" x2="605" y2="158" stroke="#00f0ff" stroke-width="3" stroke-dasharray="5 4"/>
+              <circle cx="605" cy="158" r="13" fill="rgba(245, 158, 11, 0.35)" stroke="#f59e0b" stroke-width="2"/>
+              <text x="448" y="144" fill="#fbbf24" font-family="JetBrains Mono" font-size="10.5" font-weight="700">
+                Empilhadeira (18 km/h) ➔
+              </text>
+              <text x="624" y="162" fill="#ff2a54" font-family="JetBrains Mono" font-size="11" font-weight="800">
+                ⚠️ COLISÃO EM 3,2s
+              </text>
+
+              <!-- PONTO SEGURO PORTARIA (QUADRANTE 4) -->
+              <circle cx="605" cy="345" r="9" fill="#10b981"/>
+              <circle cx="605" cy="345" r="18" fill="none" stroke="#10b981" stroke-width="1.5" opacity="0.6"/>
+              <text x="495" y="382" fill="#6ee7b7" font-family="JetBrains Mono" font-size="11" font-weight="700">
+                ✓ FLUXO NORMAL · 2 BIOMETRIAS PROTEGIDAS
+              </text>
+            </svg>
+          </div>
+
+          <div class="map-legend">
+            <span><i class="dot critico"></i> Trajetória Rastreada entre Câmeras (CAM-03 ➔ CAM-01)</span>
+            <span><i class="dot aviso"></i> Vetor Preditivo de Quase-Acidente (Empilhadeira × Pedestre)</span>
+            <span><i class="dot seguro"></i> Setor Auditado (EPI + Borrão Facial LGPD)</span>
+          </div>
+        </div>
+
+        <!-- LISTA DE ANALITICOS SAFETYTECH -->
+        <div class="panel-card safety-list-card">
+          <div class="card-title-row">
+            <h3>🦺 DIAGNÓSTICO PREDITIVO DO GALPÃO</h3>
+            <span class="tag-oficial">SAFETYTECH AI</span>
+          </div>
+          <p class="card-subtitle">Monitoramento simultâneo de segurança patrimonial e prevenção de acidentes operacionais:</p>
+          <div class="safety-items" id="listaSafetyTech"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       ABA 4: SIMULADOR DE ROI (ESCALA 12X36 PNCP & BLINDAGEM LGPD)
+  ========================================================== -->
+  <section class="tab-section cyber-modal-screen" id="aba-roi">
+    <div class="cyber-screen-container">
+      <div class="cyber-section-header">
+        <div>
+          <span class="cyber-eyebrow">MÓDULO 04 // VIABILIDADE ECONÔMICA B2B (BASE OFICIAL PNCP + ANPD)</span>
+          <h2>SIMULADOR DE ROI — CORTE DE CUSTO DA ESCALA 12×36 &amp; BLINDAGEM LGPD</h2>
+        </div>
+        <div class="cyber-kpi-strip">
+          <div class="ck-item"><span>CUSTO POSTO 24H (PNCP)</span><strong class="critico">R$ 171.570,75/ano</strong></div>
+          <div class="ck-item"><span>PRIORIDADE DOS GESTORES</span><strong class="verde">54% (Folha 12×36)</strong></div>
+          <div class="ck-item"><span>TETO MULTA ANPD</span><strong class="ciano">R$ 50 MILHÕES</strong></div>
+        </div>
+      </div>
+
+      <div class="roi-layout">
+        <!-- CONTROLES DO SIMULADOR -->
+        <div class="panel-card roi-controls-card">
+          <div class="card-title-row">
+            <h3>🧮 PARÂMETROS DA OPERAÇÃO B2B</h3>
+            <span class="tag-oficial">DADOS PNCP</span>
+          </div>
+          <p class="card-subtitle">Ajuste o cenário do cliente para calcular a redução imediata de OPEX:</p>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="inputPostos">Postos 24h de Monitoramento Passivo (Escala 12×36)</label>
+              <strong id="valPostos">6 postos</strong>
+            </div>
+            <input type="range" id="inputPostos" min="2" max="24" step="1" value="6" oninput="calcularRoi()" />
+            <div class="slider-hint">Custo oficial PNCP por posto 24h: <strong>R$ 171.570,75 / ano</strong> (R$ 14.297,56 / mês)</div>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="inputCameras">Câmeras / Fluxos Integrados à SmartSec AI</label>
+              <strong id="valCameras">48 câmeras</strong>
+            </div>
+            <input type="range" id="inputCameras" min="16" max="240" step="8" value="48" oninput="calcularRoi()" />
+            <div class="slider-hint">Acoplamento via software (RTSP/ONVIF) sem necessidade de trocar as câmeras atuais.</div>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="inputFaturamento">Faturamento Anual da Empresa (Cálculo Risco ANPD)</label>
+              <strong id="valFaturamento">R$ 120 milhões</strong>
+            </div>
+            <input type="range" id="inputFaturamento" min="20" max="500" step="10" value="120" oninput="calcularRoi()" />
+            <div class="slider-hint">Art. 52 LGPD: Sanções de até 2% do faturamento bruto (limitadas a R$ 50 milhões).</div>
+          </div>
+
+          <div class="plan-selector">
+            <label class="plan-label">PLANO DE ASSINATURA SAAS:</label>
+            <div class="plan-options">
+              <button class="plan-btn" id="btnPlanoCore" onclick="selecionarPlano('core')">
+                <strong>PLANO CORE</strong>
+                <span>Anti-Fadiga + Alerta Preditivo</span>
+                <small>R$ 89 / câmera / mês</small>
+              </button>
+              <button class="plan-btn active" id="btnPlanoEnterprise" onclick="selecionarPlano('enterprise')">
+                <strong>ENTERPRISE ⭐</strong>
+                <span>Core + Sinesp Regional + Borrão LGPD</span>
+                <small>R$ 129 / câmera / mês</small>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESULTADO DO SIMULADOR -->
+        <div class="roi-results-col">
+          <div class="roi-hero-card">
+            <div class="rh-top">
+              <div>
+                <span class="rh-eyebrow">ECONOMIA LÍQUIDA ANUAL DIRETA NA FOLHA (OPEX)</span>
+                <h2 id="roiEconomiaAnual">R$ 611.979,00 / ano</h2>
+                <p id="roiResumoPostos">Redução de <strong>6 para 2 postos humanos</strong> (otimização de 4 postos passivos 12×36 substituídos por triagem Edge AI)</p>
+              </div>
+              <div class="rh-badge">
+                <span>ROI / PAYBACK</span>
+                <strong id="roiPayback">0,4 mês</strong>
+                <small>PoC gratuita 15 dias</small>
+              </div>
+            </div>
+
+            <div class="roi-bars-comparison">
+              <div class="rb-row">
+                <div class="rb-label">
+                  <span>Custo Anual Atual (Somente Folha 12×36 Passiva)</span>
+                  <strong id="roiCustoAtual">R$ 1.029.424,50</strong>
+                </div>
+                <div class="rb-track"><div class="rb-fill legado" style="width: 100%"></div></div>
+              </div>
+
+              <div class="rb-row">
+                <div class="rb-label">
+                  <span>Novo Custo Anual (CCO Enxuta + Assinatura SmartSec AI)</span>
+                  <strong id="roiNovoCusto">R$ 417.445,50</strong>
+                </div>
+                <div class="rb-track"><div class="rb-fill smartsec" id="barraNovoCusto" style="width: 41%"></div></div>
+              </div>
+            </div>
+
+            <div class="roi-metrics-grid">
+              <div class="rm-box">
+                <span>Economia Mensal Direta</span>
+                <strong class="verde" id="roiEconomiaMensal">R$ 50.998,25 / mês</strong>
+                <small>Redução imediata de OPEX</small>
+              </div>
+              <div class="rm-box">
+                <span>Investimento SaaS Mensal</span>
+                <strong id="roiInvestimentoSaas">R$ 6.192,00 / mês</strong>
+                <small id="roiDetalheSaas">48 câmeras × R$ 129 (Enterprise)</small>
+              </div>
+              <div class="rm-box">
+                <span>Blindagem Multa LGPD / ANPD</span>
+                <strong class="azul" id="roiMultaEvitada">Até R$ 2.400.000,00</strong>
+                <small>2% do faturamento protegido</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-card sources-card">
+            <h4>📚 FONTES OFICIAIS DA VALIDAÇÃO (STARTUP ONE — FIAP)</h4>
+            <ul class="sources-list">
+              <li><strong>PNCP (Portal Nacional de Contratações Públicas):</strong> Custo anual de R$ 171.570,75 por posto 24h (escala 12×36). Na pesquisa, 82% dos gestores confirmaram que a folha consome &gt;60% do orçamento.</li>
+              <li><strong>ABESE &amp; IBM (Alert Fatigue):</strong> Até 95% dos disparos em CFTV tradicional são falsos positivos climáticos.</li>
+              <li><strong>Sinesp (MJSP) &amp; ANPD (Art. 11 e 52 LGPD):</strong> Calibração criminal por estado e proteção contra multas de até 2% do faturamento (R$ 50 milhões).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="dados.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

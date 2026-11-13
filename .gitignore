@@ -1,0 +1,8 @@
+.vercel/
+prototipo/.vercel/
+.env*
+prototipo/.env*
+__pycache__/
+*.pyc
+entrega/Template_Original_Cap08.docx
+entrega/documento_entrega.html
